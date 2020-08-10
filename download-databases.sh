@@ -10,7 +10,7 @@ DIR=/srv/taginfo/data
 
 for db in master history db wiki languages projects search; do
     file="taginfo-${db}.db.bz2"
-    curl --silent --output $DIR/$file https://taginfo.openstreetmap.org/download/$file
+    curl --silent --location --output $DIR/$file https://taginfo.openstreetmap.org/download/$file
     bunzip2 $DIR/$file
 done
 
