@@ -89,8 +89,9 @@ chown robot:robot $DIR/taginfo-config.json
 
 # -- Install Ruby gems
 
+cd /srv/taginfo/taginfo
 bundle update --bundler
-(cd /srv/taginfo/taginfo; bundle install)
+bundle install
 
 
 # -- Apache setup --

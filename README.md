@@ -68,16 +68,17 @@ There are basically two different use cases for this test server:
 * You want to test or work on the taginfo update mechanism
 * You want to test or work on the taginfo user interface
 
-## Test or work on the update mechanism
+### Test or work on the update mechanism
 
 * Run `compile-tools.sh` once to download and compile the C++ tools that
   a taginfo update needs.
 * Run `download-planet.sh` to download the current planet PBF file into the
   right place or download some other OSM file.
+* Check that the config file `/srv/taginfo/taginfo-config.json` is correct.
 * Run `run-update.sh` to do an update cycle at least once. For all stats to
   be updated correctly you have to run it twice.
 
-## Test or work on the user interface
+### Test or work on the user interface
 
 * Run `download-databases.sh` to download all databases from the main OSMF
   server to get you set up quickly.
