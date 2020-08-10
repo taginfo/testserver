@@ -5,6 +5,8 @@ The files in this directory are used to set up a Taginfo test server. You will
 need an [Hetzner cloud](https://www.hetzner.com/cloud) account and the [hcloud
 command line tool](https://github.com/hetznercloud/cli).
 
+## Setting up the server
+
 Here are the steps needed to install the master server:
 
 * Go to the [Hetzner Cloud console](https://console.hetzner.cloud/) and log
@@ -37,6 +39,10 @@ hcloud server create \
     --ssh-key admin
 ```
 
+(Depending an what you want to do, you might need a smaller or bigger virtual
+machine. For updating from a planet file you probably need a cx51 with 32 GB
+RAM. If you are just running the UI, a smaller machine is fine.)
+
 * You should now be able to log into the server as root (`hcloud server
   ssh taginfo`).
 * Copy the script `init.sh` to the new server and run it as `root` user:
@@ -54,4 +60,25 @@ ssh -t root@$IP /tmp/init.sh
 ```
 hcloud server ssh -u robot taginfo
 ```
+
+## Using
+
+There are basically two different use cases for this test server:
+
+* You want to test or work on the taginfo update mechanism
+* You want to test or work on the taginfo user interface
+
+## Test or work on the update mechanism
+
+* Run `compile-tools.sh` once to download and compile the C++ tools that
+  a taginfo update needs.
+* Run `download-planet.sh` to download the current planet PBF file into the
+  right place or download some other OSM file.
+* Run `run-update.sh` to do an update cycle at least once. For all stats to
+  be updated correctly you have to run it twice.
+
+## Test or work on the user interface
+
+* Run `download-databases.sh` to download all databases from the main OSMF
+  server to get you set up quickly.
 

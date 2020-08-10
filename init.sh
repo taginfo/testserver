@@ -9,7 +9,6 @@ set -e
 set -x
 
 REPOSITORY=/home/robot/testserver
-BIN=/usr/local/bin
 
 # -- Install Debian packages --
 
@@ -69,17 +68,8 @@ chmod 600 /home/robot/.ssh/authorized_keys
 # -- Directory setup --
 
 DIR=/srv/taginfo
-mkdir -p $DIR $DIR/data $DIR/download $DIR/planet $DIR/var/log $DIR/var/sources
+mkdir -p $DIR $DIR/data $DIR/download $DIR/planet $DIR/log $DIR/update
 chown -R robot:robot $DIR
-
-
-# -- Links to tools --
-
-# These will only be available if compile-tools.sh is run, but then they
-# will immediately be in the PATH.
-for i in similarity stats unicode; do
-    ln -s /usr/local/bin/taginfo-$i $DIR/build/src/taginfo-$i
-end
 
 
 # -- Get git repositories --
@@ -91,7 +81,7 @@ su -c "git clone https://github.com/taginfo/taginfo $DIR/taginfo" robot
 # -- Set up configuration
 
 grep -v '^ *//' $DIR/taginfo/taginfo-config-example.json | \
-    jq '.logging.directory = "/srv/taginfo/var/log" | .paths.data_dir = "/srv/taginfo/data" | .paths.download_dir = "/srv/taginfo/download" | .sources.db.planetfile = "/srv/taginfo/planet/data.osm.pbf"' \
+    jq '.logging.directory = "/srv/taginfo/log" | .paths.data_dir = "/srv/taginfo/data" | .paths.download_dir = "/srv/taginfo/download" | .sources.db.planetfile = "/srv/taginfo/planet/data.osm.pbf" | .sources.db.bindir = "/srv/taginfo/build/src" ' \
     >$DIR/taginfo-config.json
 
 chown robot:robot $DIR/taginfo-config.json
@@ -110,7 +100,6 @@ cp $REPOSITORY/apache/taginfo.conf /etc/apache2/sites-available/000-default.conf
 a2enmod cache
 a2enmod cache_disk
 a2enmod headers
-a2enmod passenger
 
 #systemctl restart apache2.service
 
