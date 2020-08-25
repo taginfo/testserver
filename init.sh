@@ -8,6 +8,7 @@
 set -e
 set -x
 
+DIR=/srv/taginfo
 REPOSITORY=/home/robot/testserver
 
 # -- Install Debian packages --
@@ -16,35 +17,45 @@ apt-get update -y
 
 apt-get dist-upgrade -u -y
 
+# Packages needed for taginfo-tools
 apt-get install -y \
-    apache2 \
     cmake \
     cmake-curses-gui \
-    curl \
-    git \
     g++ \
-    jq \
-    libapache2-mod-passenger \
+    libbz2-dev \
     libexpat1-dev \
     libgd-dev \
     libicu-dev \
     libosmium2-dev \
-    libsparsehash-dev \
+    libprotozero-dev \
     libsqlite3-dev \
-    libutfcpp-dev \
-    m4 \
     make \
+    zlib1g-dev
+
+# Packages needed for taginfo
+apt-get install -y \
+    curl \
+    jq \
     pbzip2 \
-    rsync \
     ruby \
-    ruby-bundler \
     ruby-dev \
-    ruby-passenger \
     sqlite3 \
-    tmux \
     unzip \
-    zip \
-    zlib1g-dev \
+    zip
+
+# Packages needed for running under Apache
+apt-get install -y \
+    apache2 \
+    libapache2-mod-passenger \
+    ruby-passenger
+
+# Other useful packages
+apt-get install -y \
+    git \
+    osmium-tool \
+    pyosmium \
+    rsync \
+    tmux \
     zsh
 
 apt-get clean
@@ -57,8 +68,10 @@ systemctl stop apache2
 
 # -- Create robot user --
 
-adduser --gecos "Robot User" --disabled-password robot
-mkdir /home/robot/.ssh
+grep --quiet robot /etc/passwd || \
+    adduser --gecos "Robot User" --disabled-password robot
+
+mkdir -p /home/robot/.ssh
 cp /root/.ssh/authorized_keys /home/robot/.ssh
 chown -R robot:robot /home/robot/.ssh
 chmod 700 /home/robot/.ssh
@@ -67,14 +80,16 @@ chmod 600 /home/robot/.ssh/authorized_keys
 
 # -- Directory setup --
 
-DIR=/srv/taginfo
 mkdir -p $DIR $DIR/data $DIR/download $DIR/planet $DIR/log $DIR/update
 chown -R robot:robot $DIR
 
 
 # -- Get git repositories --
 
+rm -fr $REPOSITORY
 su -c "git clone https://github.com/taginfo/testserver $REPOSITORY" robot
+
+rm -fr $DIR/taginfo
 su -c "git clone https://github.com/taginfo/taginfo $DIR/taginfo" robot
 
 
@@ -90,7 +105,7 @@ chown robot:robot $DIR/taginfo-config.json
 # -- Install Ruby gems
 
 cd /srv/taginfo/taginfo
-bundle update --bundler
+gem install bundler
 bundle install
 
 
