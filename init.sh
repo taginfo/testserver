@@ -43,6 +43,13 @@ apt-get install -y \
     unzip \
     zip
 
+RUBY_VERSION=`ruby -e "puts RUBY_VERSION.split('.')[0..1].join('.')"`
+
+# Packages needed for running in uWSGI application server
+apt-get install -y \
+    uwsgi-core \
+    uwsgi-plugin-rack-ruby$RUBY_VERSION
+
 # Packages needed for running under Apache
 apt-get install -y \
     apache2 \
