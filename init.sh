@@ -103,7 +103,13 @@ su -c "git clone https://github.com/taginfo/taginfo $DIR/taginfo" robot
 # -- Set up configuration
 
 grep -v '^ *//' $DIR/taginfo/taginfo-config-example.json | \
-    jq '.logging.directory = "/srv/taginfo/log" | .paths.data_dir = "/srv/taginfo/data" | .paths.download_dir = "/srv/taginfo/download" | .sources.db.planetfile = "/srv/taginfo/planet/data.osm.pbf" | .sources.db.bindir = "/srv/taginfo/build/src" ' \
+    jq '.logging.directory                   = "/srv/taginfo/log"' | \
+    jq '.paths.data_dir                      = "/srv/taginfo/data"' | \
+    jq '.paths.download_dir                  = "/srv/taginfo/download"' | \
+    jq '.paths.bin_dir                       = "/srv/taginfo/build/src"' | \
+    jq '.sources.db.planetfile               = "/srv/taginfo/planet/data.osm.pbf"' | \
+    jq '.sources.chronology.osm_history_file = "/srv/taginfo/planet/history-data.osh.pbf"' | \
+    jq '.sources.db.bindir                   = "/srv/taginfo/build/src"' \
     >$DIR/taginfo-config.json
 
 chown robot:robot $DIR/taginfo-config.json
