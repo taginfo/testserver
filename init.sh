@@ -40,6 +40,7 @@ apt-get install -y \
     ruby \
     ruby-dev \
     sqlite3 \
+    sqlite3-pcre \
     unzip \
     zip
 

@@ -24,7 +24,7 @@ hcloud server create \
     --name taginfo \
     --location nbg1 \
     --type cx21 \
-    --image debian-10 \
+    --image debian-11 \
     --ssh-key admin
 ```
 
@@ -48,7 +48,7 @@ RAM. If you are just running the UI, a smaller machine is fine.)
 * Copy the script `init.sh` to the new server and run it as `root` user:
 
 ```
-IP=`hcloud server describe -o 'format={{.PublicNet.IPv4.IP}}' taginfo`
+IP=$(hcloud server ip taginfo)
 echo $IP
 scp init.sh root@$IP:/tmp/
 ssh -t root@$IP /tmp/init.sh
