@@ -5,7 +5,7 @@
 #  Must be run once as user "root" on the server when it is first created.
 #
 
-set -e
+set -euo pipefail
 set -x
 
 DIR=/srv/taginfo
@@ -44,12 +44,12 @@ apt-get install -y \
     unzip \
     zip
 
-RUBY_VERSION=`ruby -e "puts RUBY_VERSION.split('.')[0..1].join('.')"`
+RUBY_VERSION=$(ruby -e "puts RUBY_VERSION.split('.')[0..1].join('.')")
 
 # Packages needed for running in uWSGI application server
 apt-get install -y \
     uwsgi-core \
-    uwsgi-plugin-rack-ruby$RUBY_VERSION
+    "uwsgi-plugin-rack-ruby$RUBY_VERSION"
 
 # Packages needed for running under Apache
 apt-get install -y \
@@ -69,7 +69,7 @@ apt-get install -y \
 apt-get clean
 
 
-# -- Stop Apache (because it isn't configured yet)
+# -- Stop Apache (because it isn't configured yet) --
 
 systemctl stop apache2
 
@@ -101,7 +101,7 @@ rm -fr $DIR/taginfo
 su -c "git clone https://github.com/taginfo/taginfo $DIR/taginfo" robot
 
 
-# -- Set up configuration
+# -- Set up configuration --
 
 grep -v '^ *//' $DIR/taginfo/taginfo-config-example.json | \
     jq '.logging.directory                   = "/srv/taginfo/log"' | \
@@ -116,7 +116,7 @@ grep -v '^ *//' $DIR/taginfo/taginfo-config-example.json | \
 chown robot:robot $DIR/taginfo-config.json
 
 
-# -- Install Ruby gems
+# -- Install Ruby gems --
 
 cd /srv/taginfo/taginfo
 gem install bundler

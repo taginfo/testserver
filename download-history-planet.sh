@@ -3,7 +3,7 @@
 #  Download history planet file
 #
 
-set -e
+set -euo pipefail
 set -x
 
 DIR=/srv/taginfo/planet

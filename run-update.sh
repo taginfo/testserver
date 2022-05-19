@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 #
 #  Run taginfo update cycle
 #
 
-set -e
+set -euo pipefail
 set -x
 
 UPDATE_DIR=/srv/taginfo/update

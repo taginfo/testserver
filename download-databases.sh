@@ -3,7 +3,7 @@
 #  Download taginfo databases from OSMF server
 #
 
-set -e
+set -euo pipefail
 set -x
 
 DIR=/srv/taginfo/data

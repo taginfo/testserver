@@ -3,7 +3,7 @@
 #  Get and compile taginfo tools
 #
 
-set -e
+set -euo pipefail
 set -x
 
 DIR=/srv/taginfo
